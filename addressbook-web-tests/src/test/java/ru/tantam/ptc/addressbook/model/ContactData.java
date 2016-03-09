@@ -1,4 +1,4 @@
-package ru.tantam.ptc.addressbook;
+package ru.tantam.ptc.addressbook.model;
 
 public class ContactData {
   private final String firstName;
