@@ -7,10 +7,10 @@ public class ContactCreationTests extends BaseTest {
 
   @Test
   public void testContactCreation() {
-    app.gotoContactCreation();
-    app.fillContactForm(new ContactData("first", "last", "address", "12345", "first.last@mmmm.com"));
-    app.submitContactForm();
-    app.gotoHomePage();
+    app.getNavigationHelper().gotoContactCreation();
+    app.getContactHelper().fillContactForm(new ContactData("first", "last", "address", "12345", "first.last@mmmm.com"));
+    app.getContactHelper().submitContactForm();
+    app.getContactHelper().returnToHomePage();
   }
 
 }
