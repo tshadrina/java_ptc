@@ -35,6 +35,9 @@ public class ContactHelper extends BaseHelper{
   }
 
   public void returnToHomePage() {
+    if (isElementPresent(By.id("maintable"))){
+      return;
+    }
     click(By.linkText("home page"));
   }
 
