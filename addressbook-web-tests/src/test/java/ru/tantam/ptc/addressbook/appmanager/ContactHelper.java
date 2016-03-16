@@ -27,11 +27,13 @@ public class ContactHelper extends BaseHelper{
     type(By.name("email"), contactData.getEmail());
 
     if (creation){
-      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+      if (contactData.getGroup()!= null){
+        //TODO а если в выпадашке нет такой группы
+          new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+        }
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
-
   }
 
   public void returnToHomePage() {
@@ -57,5 +59,15 @@ public class ContactHelper extends BaseHelper{
   public void deleteSelectedContacts() {
     click(By.xpath("//div[@id='content']/form[2]/div[2]/input"));
 
+  }
+
+  public void createContact(ContactData contact) {
+    fillContactForm(contact, true);
+    submitContactForm();
+    returnToHomePage();
+  }
+
+  public boolean isThereAContact() {
+    return isElementPresent(By.xpath(".//*[@id='maintable']/tbody/tr[2]/td[1]/input[@type='checkbox']"));
   }
 }
