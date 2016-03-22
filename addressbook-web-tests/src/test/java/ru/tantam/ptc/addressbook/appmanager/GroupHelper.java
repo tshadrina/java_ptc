@@ -5,6 +5,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import ru.tantam.ptc.addressbook.model.GroupData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Tanya on 09.03.2016.
  */
@@ -65,5 +68,16 @@ public class GroupHelper extends BaseHelper {
 
   public int getGroupCount() {
     return wd.findElements(By.name("selected[]")).size();
+  }
+
+  public List<GroupData> getGroupList() {
+    List<GroupData> groups = new ArrayList<GroupData>();
+    List<WebElement> elements = wd.findElements(By.xpath(".//span['group']"));
+    for (WebElement element: elements){
+      String name = element.getText();
+      GroupData group = new GroupData(name, null, null);
+      groups.add(group);
+    }
+    return groups;
   }
 }
