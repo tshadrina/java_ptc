@@ -1,8 +1,11 @@
 package ru.tantam.ptc.addressbook.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.tantam.ptc.addressbook.model.ContactData;
 import ru.tantam.ptc.addressbook.model.GroupData;
+
+import java.util.List;
 
 /**
  * Created by Tanya on 10.03.2016.
@@ -12,10 +15,18 @@ public class ContactDeletionTests extends BaseTest {
   @Test
   public void testContactDeletion(){
     preconditions();
-    app.getContactHelper().selectContact();
+    List<ContactData> before =app.getContactHelper().getContactList();
+
+    app.getContactHelper().selectContact(before.size()-1);
     app.getContactHelper().deleteSelectedContacts();
     app.getContactHelper().alertAccept();
     app.getNavigationHelper().gotoHomePage();
+
+    List<ContactData> after =app.getContactHelper().getContactList();
+    Assert.assertEquals(after.size(), before.size() - 1);
+
+    before.remove(before.size()-1);
+    Assert.assertEquals(before,after);
   }
 
   private void preconditions() {
