@@ -42,8 +42,8 @@ public class GroupHelper extends BaseHelper {
   public void selectGroup(int index) {
     WebElement group = wd.findElements(By.name("selected[]")).get(index);
     if (!group.isSelected()) {
-        group.click();
-      }
+      group.click();
+    }
   }
 
   public void initGroupModification() {
@@ -62,8 +62,20 @@ public class GroupHelper extends BaseHelper {
 
   }
 
+  public void modifyGroup(int index, GroupData group) {
+    selectGroup(index);
+    initGroupModification();
+    fillGroupForm(group);
+    submitGroupModification();
+    returnToGroupPage();
+  }
+
   public boolean isThereAGroup() {
     return isElementPresent(By.name("selected[]"));
+  }
+
+  public boolean isThereAGroup(String name) {
+    return isElementPresent(By.xpath(".//span[@class='group' and .='" + name + "']"));
   }
 
   public int getGroupCount() {
@@ -73,7 +85,7 @@ public class GroupHelper extends BaseHelper {
   public List<GroupData> getGroupList() {
     List<GroupData> groups = new ArrayList<GroupData>();
     List<WebElement> elements = wd.findElements(By.xpath(".//span['group']"));
-    for (WebElement element: elements){
+    for (WebElement element : elements) {
       String name = element.getText();
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
       GroupData group = new GroupData(id, name, null, null);

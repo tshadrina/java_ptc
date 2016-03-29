@@ -1,6 +1,7 @@
 package ru.tantam.ptc.addressbook.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.tantam.ptc.addressbook.model.ContactData;
 import ru.tantam.ptc.addressbook.model.GroupData;
@@ -10,15 +11,17 @@ import java.util.List;
 
 public class ContactCreationTests extends BaseTest {
 
-  @Test
-  public void testContactCreation() {
+  @BeforeMethod
+  public void preconditions() {
     app.getNavigationHelper().gotoGroupPage();
-    //TODO а есть ли тут группа с именем "zz"
-    if (!app.getGroupHelper().isThereAGroup()) {
+    if (!app.getGroupHelper().isThereAGroup("test2")) {
       app.getGroupHelper().createGroup(new GroupData("test2", null, null));
     }
-
     app.getNavigationHelper().gotoHomePage();
+  }
+
+  @Test
+  public void testContactCreation() {
     List<ContactData> before = app.getContactHelper().getContactList();
     app.getNavigationHelper().gotoContactCreation();
 

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by Tanya on 09.03.2016.
  */
-public class ContactHelper extends BaseHelper{
+public class ContactHelper extends BaseHelper {
 
   public ContactHelper(WebDriver wd) {
     super(wd);
@@ -30,18 +30,18 @@ public class ContactHelper extends BaseHelper{
     type(By.name("mobile"), contactData.getMobile());
     type(By.name("email"), contactData.getEmail());
 
-    if (creation){
-      if (contactData.getGroup()!= null){
+    if (creation) {
+      if (contactData.getGroup() != null) {
         //TODO а если в выпадашке нет такой группы
-          new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-        }
+        new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+      }
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
   }
 
   public void returnToHomePage() {
-    if (isElementPresent(By.id("maintable"))){
+    if (isElementPresent(By.id("maintable"))) {
       return;
     }
     click(By.linkText("home page"));
@@ -73,6 +73,13 @@ public class ContactHelper extends BaseHelper{
     returnToHomePage();
   }
 
+  public void modifyContact(int index, ContactData contact) {
+    initContactModification(index);
+    fillContactForm(contact, false);
+    submitContactModification();
+    returnToHomePage();
+  }
+
   public boolean isThereAContact() {
     return isElementPresent(By.xpath(".//*[@id='maintable']/tbody/tr[2]/td[1]/input[@type='checkbox']"));
   }
@@ -80,7 +87,7 @@ public class ContactHelper extends BaseHelper{
   public List<ContactData> getContactList() {
     List<ContactData> contacts = new ArrayList<>();
     List<WebElement> elements = wd.findElements(By.xpath(".//*[@name='entry']"));
-    for (WebElement element: elements){
+    for (WebElement element : elements) {
       String first = element.findElements(By.tagName("td")).get(2).getText();
       String last = element.findElements(By.tagName("td")).get(1).getText();
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));

@@ -1,8 +1,10 @@
 package ru.tantam.ptc.addressbook.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.tantam.ptc.addressbook.model.ContactData;
+import ru.tantam.ptc.addressbook.model.GroupData;
 
 import java.util.Comparator;
 import java.util.List;
@@ -12,24 +14,30 @@ import java.util.List;
  */
 public class ContactModificationTests extends BaseTest {
 
-  @Test
-  public void testContactModification() {
+  @BeforeMethod
+  public void preconditions() {
     if (!app.getContactHelper().isThereAContact()) {
+      app.getNavigationHelper().gotoGroupPage();
+      if (!app.getGroupHelper().isThereAGroup("test2")) {
+        app.getGroupHelper().createGroup(new GroupData("test2", null, null));
+      }
+      app.getNavigationHelper().gotoContactCreation();
       app.getContactHelper().createContact(new ContactData("first", "last", "address", "12345", "first.last@mmmm.com", "test2"));
     }
+  }
 
+  @Test
+  public void testContactModification() {
     List<ContactData> before = app.getContactHelper().getContactList();
-    app.getContactHelper().initContactModification(before.size() - 1);
+    int index = before.size() - 1;
+    ContactData contact = new ContactData(before.get(index).getId(), "first", "las", "address2", "22345", "first2.last2@mmmm.com", null);
 
-    ContactData contact = new ContactData(before.get(before.size() - 1).getId(), "first", "las", "address2", "22345", "first2.last2@mmmm.com", null);
-    app.getContactHelper().fillContactForm(contact, false);
-    app.getContactHelper().submitContactModification();
-    app.getContactHelper().returnToHomePage();
+    app.getContactHelper().modifyContact(index, contact);
 
     List<ContactData> after = app.getContactHelper().getContactList();
     Assert.assertEquals(after.size(), before.size());
 
-    before.remove(before.size() - 1);
+    before.remove(index);
     before.add(contact);
     Comparator<ContactData> byId = (c1, c2) -> (Integer.compare(c1.getId(), c2.getId()));
     before.sort(byId);
