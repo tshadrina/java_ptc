@@ -19,10 +19,16 @@ public class ContactModificationTests extends BaseTest {
     if (!app.contact().isThereAContact()) {
       app.goTo().groupPage();
       if (!app.group().isThereAGroup("test2")) {
-        app.group().create(new GroupData("test2", null, null));
+        app.group().create(new GroupData().withName("test2"));
       }
       app.goTo().contactCreation();
-      app.contact().create(new ContactData("first", "last", "address", "12345", "first.last@mmmm.com", "test2"));
+      app.contact().create(new ContactData().
+              withFirstName("first").
+              withLastName("last").
+              withAddress("address").
+              withMobile("12345").
+              withEmail("first.last@mmmm.com").
+              withGroup("test2"));
     }
   }
 
@@ -30,7 +36,13 @@ public class ContactModificationTests extends BaseTest {
   public void testContactModification() {
     List<ContactData> before = app.contact().list();
     int index = before.size() - 1;
-    ContactData contact = new ContactData(before.get(index).getId(), "first", "las", "address2", "22345", "first2.last2@mmmm.com", null);
+    ContactData contact = new ContactData().
+            withId(before.get(index).getId()).
+            withFirstName("first").
+            withLastName("las").
+            withAddress("address2").
+            withMobile("22345").
+            withEmail("first2.last@mmmm.com");
 
     app.contact().modify(index, contact);
 

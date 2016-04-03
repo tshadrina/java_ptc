@@ -18,10 +18,16 @@ public class ContactDeletionTests extends BaseTest {
     if (!app.contact().isThereAContact()) {
       app.goTo().groupPage();
       if (!app.group().isThereAGroup("test2")) {
-        app.group().create(new GroupData("test2", null, null));
+        app.group().create(new GroupData().withName("test2"));
       }
       app.goTo().contactCreation();
-      app.contact().create(new ContactData("first", "last", "address", "12345", "first.last@mmmm.com", "test2"));
+      app.contact().create(new ContactData().
+              withFirstName("first").
+              withLastName("last").
+              withAddress("address").
+              withMobile("12345").
+              withEmail("first.last@mmmm.com").
+              withGroup("test2"));
     }
   }
 
