@@ -7,6 +7,7 @@ import ru.tantam.ptc.addressbook.model.ContactData;
 import ru.tantam.ptc.addressbook.model.GroupData;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Tanya on 10.03.2016.
@@ -33,16 +34,16 @@ public class ContactDeletionTests extends BaseTest {
 
   @Test
   public void testContactDeletion() {
-    List<ContactData> before = app.contact().list();
+    Set<ContactData> before = app.contact().all();
 
-    int index = before.size() - 1;
-    app.contact().delete(index);
+    ContactData deletedContact = before.iterator().next();
+    app.contact().delete(deletedContact);
     app.goTo().homePage();
 
-    List<ContactData> after = app.contact().list();
-    Assert.assertEquals(after.size(), index);
+    Set<ContactData> after = app.contact().all();
+    Assert.assertEquals(after.size(), before.size() - 1);
 
-    before.remove(index);
+    before.remove(deletedContact);
     Assert.assertEquals(before, after);
   }
 

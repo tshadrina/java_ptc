@@ -7,8 +7,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.tantam.ptc.addressbook.model.ContactData;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Tanya on 09.03.2016.
@@ -47,16 +48,16 @@ public class ContactHelper extends BaseHelper {
     click(By.linkText("home page"));
   }
 
-  public void initContactModification(int index) {
-    wd.findElements(By.xpath("//img[@title='Edit']")).get(index).click();
+  public void initContactModification(int id) {
+    wd.findElement(By.xpath(".//a[@href='edit.php?id=" + id + "']")).click();
   }
 
   public void submitContactModification() {
     click(By.xpath(".//input[@value='Update' and @type='submit'][1]"));
   }
 
-  public void selectContact(int index) {
-    WebElement contact = wd.findElements(By.name("selected[]")).get(index);
+  private void selectContactById(int id) {
+    WebElement contact = wd.findElement(By.id(String.valueOf(id)));
     if (!contact.isSelected()) {
       contact.click();
     }
@@ -73,15 +74,15 @@ public class ContactHelper extends BaseHelper {
     returnToHomePage();
   }
 
-  public void modify(int index, ContactData contact) {
-    initContactModification(index);
+  public void modify(ContactData contact) {
+    initContactModification(contact.getId());
     fillContactForm(contact, false);
     submitContactModification();
     returnToHomePage();
   }
 
-  public void delete(int index) {
-    selectContact(index);
+  public void delete(ContactData contact) {
+    selectContactById(contact.getId());
     deleteSelectedContacts();
     alertAccept();
   }
@@ -90,8 +91,8 @@ public class ContactHelper extends BaseHelper {
     return isElementPresent(By.xpath(".//*[@id='maintable']/tbody/tr[2]/td[1]/input[@type='checkbox']"));
   }
 
-  public List<ContactData> list() {
-    List<ContactData> contacts = new ArrayList<>();
+  public Set<ContactData> all() {
+    Set<ContactData> contacts = new HashSet<>();
     List<WebElement> elements = wd.findElements(By.xpath(".//*[@name='entry']"));
     for (WebElement element : elements) {
       String first = element.findElements(By.tagName("td")).get(2).getText();

@@ -6,8 +6,7 @@ import org.testng.annotations.Test;
 import ru.tantam.ptc.addressbook.model.ContactData;
 import ru.tantam.ptc.addressbook.model.GroupData;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
 
 public class ContactCreationTests extends BaseTest {
 
@@ -22,7 +21,7 @@ public class ContactCreationTests extends BaseTest {
 
   @Test
   public void testContactCreation() {
-    List<ContactData> before = app.contact().list();
+    Set<ContactData> before = app.contact().all();
     app.goTo().contactCreation();
 
     ContactData contact = new ContactData().
@@ -34,14 +33,11 @@ public class ContactCreationTests extends BaseTest {
             withGroup("test2");
     app.contact().create(contact);
 
-    List<ContactData> after = app.contact().list();
+    Set<ContactData> after = app.contact().all();
     Assert.assertEquals(after.size(), before.size() + 1);
 
-    Comparator<ContactData> byId = (c1, c2) -> Integer.compare(c1.getId(), c2.getId());
-    contact.withId(after.stream().max(byId).get().getId());
+    contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt());
     before.add(contact);
-    before.sort(byId);
-    after.sort(byId);
     Assert.assertEquals(after, before);
   }
 
