@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import ru.tantam.ptc.addressbook.model.GroupData;
+import ru.tantam.ptc.addressbook.model.Groups;
 
 import java.util.HashSet;
 import java.util.List;
@@ -85,8 +86,8 @@ public class GroupHelper extends BaseHelper {
     return isElementPresent(By.xpath(".//span[@class='group' and .='" + name + "']"));
   }
 
-  public Set<GroupData> all() {
-    Set<GroupData> groups = new HashSet<>();
+  public Groups all() {
+    Groups groups = new Groups();
     List<WebElement> elements = wd.findElements(By.xpath(".//span['group']"));
     for (WebElement element : elements) {
       String name = element.getText();

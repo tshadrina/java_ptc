@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.tantam.ptc.addressbook.model.ContactData;
+import ru.tantam.ptc.addressbook.model.Contacts;
 
 import java.util.HashSet;
 import java.util.List;
@@ -91,8 +92,8 @@ public class ContactHelper extends BaseHelper {
     return isElementPresent(By.xpath(".//*[@id='maintable']/tbody/tr[2]/td[1]/input[@type='checkbox']"));
   }
 
-  public Set<ContactData> all() {
-    Set<ContactData> contacts = new HashSet<>();
+  public Contacts all() {
+    Contacts contacts = new Contacts();
     List<WebElement> elements = wd.findElements(By.xpath(".//*[@name='entry']"));
     for (WebElement element : elements) {
       String first = element.findElements(By.tagName("td")).get(2).getText();

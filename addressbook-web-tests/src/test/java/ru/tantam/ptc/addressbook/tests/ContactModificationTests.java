@@ -1,12 +1,14 @@
 package ru.tantam.ptc.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.tantam.ptc.addressbook.model.ContactData;
+import ru.tantam.ptc.addressbook.model.Contacts;
 import ru.tantam.ptc.addressbook.model.GroupData;
 
-import java.util.Set;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Created by Tanya on 09.03.2016.
@@ -33,7 +35,7 @@ public class ContactModificationTests extends BaseTest {
 
   @Test
   public void testContactModification() {
-    Set<ContactData> before = app.contact().all();
+    Contacts before = app.contact().all();
     ContactData modifiedContact = before.iterator().next();
     ContactData contact = new ContactData().
             withId(modifiedContact.getId()).
@@ -44,12 +46,9 @@ public class ContactModificationTests extends BaseTest {
             withEmail("first2.last@mmmm.com");
     app.contact().modify(contact);
 
-    Set<ContactData> after = app.contact().all();
-    Assert.assertEquals(after.size(), before.size());
-
-    before.remove(modifiedContact);
-    before.add(contact);
-    Assert.assertEquals(before, after);
+    Contacts after = app.contact().all();
+    assertEquals(after.size(), before.size());
+    assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
 
   }
 }
