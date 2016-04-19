@@ -72,6 +72,7 @@ public class ContactHelper extends BaseHelper {
   public void create(ContactData contact) {
     fillContactForm(contact, true);
     submitContactForm();
+    contactCache = null;
     returnToHomePage();
   }
 
@@ -79,12 +80,14 @@ public class ContactHelper extends BaseHelper {
     initContactModification(contact.getId());
     fillContactForm(contact, false);
     submitContactModification();
+    contactCache = null;
     returnToHomePage();
   }
 
   public void delete(ContactData contact) {
     selectContactById(contact.getId());
     deleteSelectedContacts();
+    contactCache = null;
     alertAccept();
   }
 
@@ -92,16 +95,21 @@ public class ContactHelper extends BaseHelper {
     return isElementPresent(By.xpath(".//*[@id='maintable']/tbody/tr[2]/td[1]/input[@type='checkbox']"));
   }
 
+  private Contacts contactCache = null;
+
   public Contacts all() {
-    Contacts contacts = new Contacts();
+    if (contactCache != null){
+      return new Contacts(contactCache);
+    }
+    contactCache = new Contacts();
     List<WebElement> elements = wd.findElements(By.xpath(".//*[@name='entry']"));
     for (WebElement element : elements) {
       String first = element.findElements(By.tagName("td")).get(2).getText();
       String last = element.findElements(By.tagName("td")).get(1).getText();
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
       ContactData contact = new ContactData().withId(id).withFirstName(first).withLastName(last);
-      contacts.add(contact);
+      contactCache.add(contact);
     }
-    return contacts;
+    return new Contacts(contactCache);
   }
 }
