@@ -6,9 +6,7 @@ import org.openqa.selenium.WebElement;
 import ru.tantam.ptc.addressbook.model.GroupData;
 import ru.tantam.ptc.addressbook.model.Groups;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Tanya on 09.03.2016.
@@ -79,6 +77,10 @@ public class GroupHelper extends BaseHelper {
     deleteSelectedGroups();
     groupCache = null;
     returnToGroupPage();
+  }
+
+  public int count(){
+    return wd.findElements(By.name("selected[]")).size();
   }
 
   public boolean isThereAGroup() {

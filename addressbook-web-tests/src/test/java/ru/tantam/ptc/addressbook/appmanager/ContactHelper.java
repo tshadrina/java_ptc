@@ -64,6 +64,10 @@ public class ContactHelper extends BaseHelper {
     }
   }
 
+  public int count(){
+    return wd.findElements(By.name("selected[]")).size();
+  }
+
   public void deleteSelectedContacts() {
     click(By.xpath("//div[@id='content']/form[2]/div[2]/input"));
 
