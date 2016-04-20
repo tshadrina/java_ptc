@@ -30,7 +30,7 @@ public class ContactCreationTests extends BaseTest {
             withFirstName("first").
             withLastName("last").
             withAddress("address").
-            withMobile("12345").
+            withMobilePhone("12345").
             withEmail("first.last@mmmm.com").
             withGroup("test2");
     app.contact().create(contact);
